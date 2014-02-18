@@ -123,7 +123,7 @@ public class Connexion extends javax.swing.JDialog {
                if ((user.equals(uname)) && (pwd.equals(password)) &&(type.equals("A")))
                {
                   // new menu().setVisible(true);
-                   JOptionPane.showMessageDialog(null,"DONE!!!");
+                   JOptionPane.showMessageDialog(null,"yoo gros bien venu!§§§§");
                    dispose();
                    tmp++;
                }
