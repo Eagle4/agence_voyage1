@@ -15,6 +15,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -43,7 +44,6 @@ public class MainWindow extends javax.swing.JFrame {
             jTable2.setModel(model); 
             System.out.print("nb ligne :"+jTable2.getRowCount());
             System.out.println(" nb col :"+jTable2.getColumnCount()+"__");
-            getRow(0);
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,11 +62,12 @@ public class MainWindow extends javax.swing.JFrame {
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        button1 = new java.awt.Button();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jComboBox1 = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         btnModifier = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jBtnSuppr = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -79,10 +80,11 @@ public class MainWindow extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "", "", "", ""
             }
         ));
         jTable2.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTable2.setCellSelectionEnabled(true);
         jTable2.addHierarchyBoundsListener(new java.awt.event.HierarchyBoundsListener() {
             public void ancestorMoved(java.awt.event.HierarchyEvent evt) {
             }
@@ -92,12 +94,24 @@ public class MainWindow extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable2);
 
-        jScrollPane2.setBounds(0, 20, 660, 340);
+        jScrollPane2.setBounds(10, 10, 660, 270);
         jDesktopPane1.add(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        button1.setLabel("button1");
-        button1.setBounds(270, 210, 57, 24);
-        jDesktopPane1.add(button1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "", "", "", ""
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        jScrollPane1.setBounds(10, 300, 660, 60);
+        jDesktopPane1.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Circuit", "Etape", "Lieux à visiter", "Client", "Réserver" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
@@ -115,7 +129,12 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("jButton2");
+        jBtnSuppr.setText("Supprimer");
+        jBtnSuppr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnSupprActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("jButton3");
 
@@ -132,10 +151,11 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(btnModifier)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)))
+                            .addComponent(jButton3)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(btnModifier, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jBtnSuppr, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)))
                 .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 683, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
@@ -149,7 +169,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(62, 62, 62)
                 .addComponent(btnModifier)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(jBtnSuppr)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -192,6 +212,7 @@ public class MainWindow extends javax.swing.JFrame {
                     TableModel model3 = new TableModel(con,sqlTabEtape,enteteEtape);
                     jTable2.setModel(model3); 
                     
+                    
                     ; break;
                      
                  case "Client" : 
@@ -226,30 +247,52 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable2AncestorResized
     
     public Object[] getRow(int IndexRow){
-        Object[] tabObj = new Object[jTable2.getRowCount()];
-            for(int i = 0;i<= jTable2.getColumnCount();i++){
-                tabObj[i] = jTable2.getModel().getValueAt(i,IndexRow);
-                System.out.print(tabObj[i]+"|");
+        Object[] tabObj = new Object[jTable2.getColumnCount()];
+            for(int i = 0;i< jTable2.getColumnCount();i++){
+                //JOptionPane.showMessageDialog(null,"getvalueat("+IndexRow+","+i+")="+jTable2.getModel().getValueAt(IndexRow,i));
+                tabObj[i] = jTable2.getModel().getValueAt(IndexRow,i);
+                //System.out.print("getvalueat("+IndexRow+","+i+")");
             }
+            String resTab = "[";
+            //System.out.print("contenu du tabobj = [");
+            for(int i = 0;i< jTable2.getColumnCount();i++){
+                resTab+=tabObj[i]+",";
+                //System.out.print(tabObj[i]+",");
+            }
+            resTab+="]";
+            System.out.print(resTab);
+            JOptionPane.showMessageDialog(null,resTab);
         return tabObj; 
     }
     
     private void btnModifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifierActionPerformed
-jTable2.addMouseListener(new MouseAdapter() {
+JOptionPane.showMessageDialog(null,"cliquez sur la ligne à modifier");
+  jTable2.addMouseListener(new MouseAdapter() {
   @Override
   public void mouseClicked(MouseEvent e) {
     Point p = e.getPoint();
-    int col = jTable2.columnAtPoint(p);
     int row = jTable2.rowAtPoint(p);
-    System.out.print("modif avant if:");
+    int col = jTable2.columnAtPoint(p);
+    //getRow(row);
+    getRow(row);
+    JOptionPane.showMessageDialog(null,"row: "+row+"col :"+col);
+   
+    jTable2.setValueAt(JOptionPane.showInputDialog(null,"Enter Cell Value:"),jTable2.getSelectedRow(),jTable2.getSelectedColumn());
+    System.out.print("iscelleditable:"+jTable2.isCellEditable(row, col));
     if (jTable2.isCellEditable(row, col)) {
-      jTable2.editCellAt(row, col);
+        boolean editCellAt = jTable2.editCellAt(row, col);
       jTable2.getEditorComponent().requestFocus();
-      System.out.print("modif ds if:");
+
     }
+   
   }
 });        // TODO add your handling code here:
     }//GEN-LAST:event_btnModifierActionPerformed
+
+    private void jBtnSupprActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSupprActionPerformed
+        //TableModel model = (outils.TableModel) jTable2.getModel().removeTableModelListener(jTable1);
+
+    }//GEN-LAST:event_jBtnSupprActionPerformed
 
     /**
      * @param args the command line arguments
@@ -287,13 +330,14 @@ jTable2.addMouseListener(new MouseAdapter() {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnModifier;
-    private java.awt.Button button1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jBtnSuppr;
     private javax.swing.JButton jButton3;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
 
