@@ -5,6 +5,7 @@
 package vue;
 
 import com.sun.corba.se.impl.encoding.CodeSetConversion;
+import java.awt.Checkbox;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -64,7 +65,7 @@ public class MainWindow extends javax.swing.JFrame {
                         String sql ="select * from circuit";
                         String[] enteteCircuit = { "Id", "Descriptif", "VilleDepart", "VilleDarrive", "PaysArrive","DateDepart","NbPlaceDisponible","Duree","Prix"};
                     
-                        TableModel model = new TableModel(con,sql,enteteCircuit);
+                        TableModel model = new TableModel(con,sql,enteteCircuit);                        
                         jTable2.setModel(model);
                         java.util.Date todayDate = new java.util.Date();
                         //DateFormat todayDate = new SimpleDateFormat("MM-dd-yy");
